@@ -1,5 +1,6 @@
 # SivaSafe runtime dependencies, pinned to the versions it was built and tested with
-# (Python 3.13.7, Windows 11).
+# (Python 3.13.7, Windows 11). On first launch SivaSafe also checks for missing
+# packages (core/installer.py) and installs whatever its chosen engines need.
 #
 #   pip install -r requirements.txt
 #   playwright install
@@ -10,6 +11,11 @@ PyQt6==6.11.0
 # Conversation: Gemini Live API (native audio, function calling)
 google-genai==2.10.0
 sounddevice==0.5.5
+miniaudio==1.71
+
+# Speech: offline speech-to-text (spoken password) and text-to-speech
+faster-whisper==1.2.1
+edge-tts==7.2.8
 
 # Face sign-in: YuNet detector + SFace recogniser
 opencv-contrib-python==4.13.0.92
@@ -17,12 +23,32 @@ numpy==2.5.0
 
 # Desktop automation, screen capture and Windows integration
 PyAutoGUI==0.9.54
+PyGetWindow==0.0.9
 mss==10.2.0
 Pillow==12.2.0
 pyperclip==1.11.0
 psutil==7.2.2
 playwright==1.60.0
+Send2Trash==2.1.0
 pywin32==312; sys_platform == "win32"
+comtypes==1.4.16; sys_platform == "win32"
+pycaw==20251023; sys_platform == "win32"
+pywinauto==0.6.9; sys_platform == "win32"
+win10toast==0.9; sys_platform == "win32"
+winrt-runtime==3.2.1; sys_platform == "win32"
+winrt-Windows.Foundation==3.2.1; sys_platform == "win32"
+winrt-Windows.Foundation.Collections==3.2.1; sys_platform == "win32"
+winrt-Windows.Data.Xml.Dom==3.2.1; sys_platform == "win32"
+winrt-Windows.Devices.Geolocation==3.2.1; sys_platform == "win32"
+winrt-Windows.UI.Notifications==3.2.1; sys_platform == "win32"
+
+# Reading files, the web and YouTube
+pdfplumber==0.11.10
+python-pptx==1.0.2
+beautifulsoup4==4.15.0
+duckduckgo-search==8.1.1
+youtube-transcript-api==1.2.4
+requests==2.34.2
 
 # Caregiver dashboard, remote pairing and security
 fastapi==0.138.1
@@ -30,11 +56,12 @@ uvicorn==0.49.0
 cryptography==49.0.0
 qrcode==8.2
 
-# Networking
-requests==2.34.2
-
-# Optional: not needed to run SivaSafe; a few extras use them when present.
-# python-docx   (lets the safety check and file tools read .docx files)
+# Optional: alternative engines and extra file types, installed only if you use them.
+# vosk          alternative offline speech-to-text engine
+# kokoro>=0.9   alternative text-to-speech engine (also needs soundfile and torch)
 # soundfile
+# torch
+# python-docx   lets the safety check and file tools read .docx files
+# PyPDF2, pandas, pydub   fallbacks some file tools use when they're present
 # keyboard
 # plyer

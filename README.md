@@ -36,9 +36,9 @@ SivaSafe is a desktop companion built around them. You simply talk to it. It kee
 
 | | |
 |---|---|
-| 🎙️ **Natural voice conversation** | Real-time, two-way speech with **Gemini 2.5 Flash (native audio)** over the Live API, with a short reply arriving in about 1.1 s. Hold **Talk**, or switch on hands-free **Listen**. It never listens on its own. |
+| 🎙️ **Natural voice conversation** | Real-time, two-way speech with **Gemini 2.5 Flash (native audio)** over the Live API. Hold **Talk**, or switch on hands-free **Listen**. It never listens on its own. |
 | 🛡️ **"Is this safe?" scam and AI-content check** | Paste a message, link, email (`.eml`) or picture and get a plain-English verdict with the reasons behind it. Tuned for Malaysian scam patterns such as TAC/OTP requests, "Macau scam" threats and bank look-alike domains. **Works fully offline**, with Gemini as an optional second opinion. |
-| 🔐 **Face, password or voice sign-in** | On-device face recognition (OpenCV **YuNet + SFace**), a password you can type *or say*, lockout after repeated failures, and password recovery by email. |
+| 🔐 **Face, password or voice sign-in** | On-device face recognition (OpenCV **YuNet + SFace**) with a two-blink liveness check against photo spoofing, a password you can type *or say* (transcribed offline by faster-whisper), lockout after repeated failures, and password recovery by email. |
 | ✅ **Plain-language permissions** | 13 capabilities (camera, microphone, WhatsApp, screen and more), each asked for **once**, in words that say what SIVA will *and won't* do. |
 | 🧭 **Guided first-run tour** | A 12-step walkthrough that highlights each real control and explains what it does. |
 | 🔠 **Adjustable text size** | One slider scales every word in the app, sign-in screen included, across 5 sizes, with **no horizontal scrolling** at any size. |
@@ -107,7 +107,7 @@ flowchart LR
 |---|---|
 | Interface | PyQt6: custom widgets, animations, and an app-wide event filter for text scaling |
 | Conversation | Google **Gemini 2.5 Flash native audio** via the `google-genai` Live API · `sounddevice` (PortAudio) |
-| Sign-in | OpenCV **YuNet** face detector + **SFace** recogniser (bundled ONNX models) |
+| Sign-in | OpenCV **YuNet** face detector + **SFace** recogniser (bundled ONNX models), with a stricter match threshold than OpenCV's default (cosine 0.65 vs 0.363) · two-blink liveness · offline **faster-whisper** for the spoken password |
 | Safety check | Pure-Python heuristic engine · Gemini structured output (JSON schema, temperature 0) |
 | Automation | PyAutoGUI · Playwright · mss · pywin32 |
 | Caregiver dashboard | FastAPI + Uvicorn over HTTPS · `cryptography` · QR pairing |
@@ -127,13 +127,15 @@ Some of the more interesting problems solved along the way:
 
 | Measure | Result |
 |---|---|
-| Median reply latency, short conversational turn (5 trials) | **1.15 s** |
-| Mean latency, tool-call parameter extraction (5 trials) | **1.16 s** |
+| Gemini 2.5 Flash API response, short conversational prompt (5 trials) | **1.15 s** median |
+| Gemini 2.5 Flash API response, tool-parameter extraction (5 trials) | **1.16 s** mean |
 | Benchmark requests completed | **15 / 15** |
 | Text-size change, GUI blocking time | **522 ms → ~140 ms** |
 | Horizontal overflow, every page and overlay at every text size | **0** |
 | WCAG 2.2 contrast audit, 15 key elements | **14 pass AA**, 9 of them AAA |
 | Atomic-save overhead | **+3.7 ms** per write |
+
+The API timings are text requests to `gemini-2.5-flash`, measured from Python. They show the model's own response time, not the full spoken round trip, which also includes listening and speech.
 
 ## Getting started
 
@@ -156,7 +158,7 @@ playwright install
 python main.py
 ```
 
-On first launch SivaSafe asks for your Gemini API key. It then runs the guided tour, which explains each control and asks for permissions as they come up.
+On first launch SivaSafe asks for your Gemini API key. It then runs the guided tour, which explains each control and asks for permissions as they come up. It also checks for missing packages and installs any that its chosen speech engines need.
 
 ### Optional configuration
 
@@ -213,7 +215,7 @@ For a double-click desktop app with no terminal window, run `launcher\build.ps1`
 
 ## Academic context
 
-SivaSafe was developed over about five months as a **Final Year Project** for the **Bachelor of Software Engineering (Honours)** at **Sunway University**, in partnership with **Lancaster University**, and was awarded an **A**. The project covered requirements, design, implementation and evaluation, the last through latency benchmarks, a WCAG 2.2 contrast audit and heuristic evaluation.
+SivaSafe was built solo over two semesters, about five to seven months in total, as the **Final Year Project** for a **Bachelor of Software Engineering (Honours)**, a dual degree from **Lancaster University** and **Sunway University**. It was awarded an **A**. The project covered requirements, design, implementation and evaluation, the last through latency benchmarks, a WCAG 2.2 contrast audit and heuristic evaluation.
 
 ## Acknowledgements
 
@@ -232,5 +234,5 @@ SivaSafe is shared under **[Creative Commons Attribution-NonCommercial 4.0](http
 
 ## Author
 
-**Arjun Shanker**, Bachelor of Software Engineering (Hons), Sunway University<br>
-GitHub: [@Thaneerrjun7](https://github.com/Thaneerrjun7)
+**Arjun Shanker**, Bachelor of Software Engineering (Hons), dual degree from Lancaster University and Sunway University<br>
+Portfolio: [thaneerrjun7.github.io/Arjun-Portfolio](https://thaneerrjun7.github.io/Arjun-Portfolio/) · GitHub: [@Thaneerrjun7](https://github.com/Thaneerrjun7)
