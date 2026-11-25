@@ -1,4 +1,5 @@
 import ast
+import os
 
 class AttrVisitor(ast.NodeVisitor):
     def __init__(self):
@@ -20,7 +21,7 @@ class AttrVisitor(ast.NodeVisitor):
                 self.read.add((self.current_class, node.attr))
         self.generic_visit(node)
 
-with open('c:/Users/Arjun Shanker/Downloads/Mark-XLVI-main/Mark-XLVI-main/ui.py', 'r', encoding='utf-8') as f:
+with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ui.py'), 'r', encoding='utf-8') as f:
     tree = ast.parse(f.read())
 
 visitor = AttrVisitor()

@@ -11,7 +11,7 @@ import sys
 import threading
 import time
 
-ROOT = r"C:\Users\Arjun Shanker\Downloads\Mark-XLVI-main\Mark-XLVI-main"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.dirname(os.path.abspath(__file__))
 LOG = os.path.join(OUT, "gui_resp.log")
 sys.path.insert(0, ROOT)

@@ -35,8 +35,8 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-CSV_PATH = Path(r"C:\Users\Arjun Shanker\Downloads\Logbook and Final Report\task_success_sheet.csv")
-OUTPUT_PATH = Path(r"C:\Users\Arjun Shanker\Downloads\Logbook and Final Report\eval_results.json")
+CSV_PATH = Path(os.environ.get("SIVA_EVAL_CSV", PROJECT_ROOT / "tests" / "task_success_sheet.csv"))
+OUTPUT_PATH = Path(os.environ.get("SIVA_EVAL_OUTPUT", PROJECT_ROOT / "tests" / "eval_results.json"))
 PROMPT_PATH = PROJECT_ROOT / "core" / "prompt.txt"
 API_CONFIG_PATH = PROJECT_ROOT / "config" / "api_keys.json"
 

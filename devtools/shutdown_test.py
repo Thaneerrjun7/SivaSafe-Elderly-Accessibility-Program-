@@ -16,8 +16,8 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = r"C:\Users\Arjun Shanker\Downloads\Mark-XLVI-main\Mark-XLVI-main"
-PY = r"C:\Users\Arjun Shanker\Downloads\Mark-XLVI-main\.venv\Scripts\python.exe"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PY = sys.executable
 sys.path.insert(0, ROOT)
 
 MARK = f"shutdown-probe-{int(time.time())}"
